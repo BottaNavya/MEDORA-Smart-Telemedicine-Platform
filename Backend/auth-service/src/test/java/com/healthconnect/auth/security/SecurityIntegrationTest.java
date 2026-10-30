@@ -64,4 +64,12 @@ class SecurityIntegrationTest {
         mvc.perform(get("/protected-resource").header("Authorization", "Bearer invalid-token"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void generatedJwt_isNotAcceptedBecauseNoJwtAuthenticationFilterIsConfigured() throws Exception {
+        String token = JwtUtil.generateToken("security-user");
+
+        mvc.perform(get("/protected-resource").header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
+    }
 }
